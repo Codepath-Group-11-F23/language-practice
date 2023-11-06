@@ -13,7 +13,7 @@ Time spent: **5** hours spent in total
 
 ## Summary
 
-This document provides an overview, project spec, and wireframes for our team's capstone project: An app that **allows users to search for a list of movies in a specific genre, language, and with subtitles.**
+This document provides an overview, project spec, and wireframes for our team's capstone project: CineSpeak/TalkFlix is an app **that allows users to search for movies to practice a language they are trying to learn. Users can search for movies by genre, original language, or available subtitles.**
 
 If we had to describe this milestone in three (3) emojis, they would be: **🗣️🎞️🗺️**
 
@@ -28,24 +28,20 @@ The following REQUIRED features are completed:
 
 The following REQUIRED files are included:
 
-- [ ] Included 📄 `brainstorming.md`, which contains:
-  - [ ] Our initial brainstorming ideas (6+ ideas)
-  - [ ] 5-category evaluation of our top 3 ideas
-  - [ ] Final app idea chosen
-- [ ] Included 📄 `project_spec.md`, which contains:
-  - [ ] App Overview: Description and evaluation
-  - [ ] App Spec: User features, Chosen API(s), User Interactions
-  - [ ] Wireframe image(s)
+- [X] Included 📄 `brainstorming.md`, which contains:
+  - [X] Our initial brainstorming ideas (6+ ideas)
+  - [X] 5-category evaluation of our top 3 ideas
+  - [X] Final app idea chosen
+- [X] Included 📄 `project_spec.md`, which contains:
+  - [X] App Overview: Description and evaluation
+  - [X] App Spec: User features, Chosen API(s), User Interactions
+  - [X] Wireframe image(s)
 
 The following BONUS features are implemented:
 
-- [ ] Added digital wireframe/mockup image(s)
-- [ ] Added a Video/GIF of an interactive prototype
-
-The following EXTRA features are implemented:
-
-- [ ] List anything else that you added to improve your submission!
+- [X] Added digital wireframe/mockup image(s)
+- [X] Added a Video/GIF of an interactive prototype
 
 ## Notes
 
-Here's a place for any other notes on this milestone!
+As a group we collectively focused on a singular API (TMDB) and came up with various ideas for utilizing it. Our final idea (name pending between CineSpeak & Talkflix) was an almagamation of all team member wireframes, which incorpoated drop down menus for filter settings, a search bar for specific queries, as well as a scrolling recyclerview for filtered movie results. Stretch features include addiitonal views for movie details if time permits.
