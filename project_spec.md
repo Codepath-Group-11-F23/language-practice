@@ -138,30 +138,24 @@ Stretch Feature
 
 <!-- Add picture of your hand sketched wireframes in this section -->
 Ryan's hand-sketched wireframe
-
 <img src="https://i.imgur.com/CK1TGmt.png" width=600>
 
 Michelle's hand-sketched wireframe
-
 <img src="https://i.imgur.com/7K69lme.jpg" width=600>
 
 Monika's hand-sketched wireframe
-
 <img src="https://i.imgur.com/2boiwGW.png" width=600>
 
 Lawrence's hand-sketched wireframe
-
 <img src="https://i.imgur.com/zTo9Cwk.jpg" width=600>
 
 
 ### [BONUS] Digital Wireframes & Mockups
 Wireframe created in Figma
-
 <img src="https://i.imgur.com/aV5Whml.png" width=600>
 
 ### [BONUS] Interactive Prototype
 Interactive prototype created in Figma, recorded with ScreenToGif
-
 <img src="https://i.imgur.com/5bHPMZ4.gif" width=600>
 
 ## Build Notes
