@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.osu.cinespeak"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.osu.cinespeak"
