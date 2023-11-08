@@ -6,13 +6,194 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <View
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/TopBottom"/>
+
+    <ImageView
+        android:id="@+id/profile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/profile"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintTop_toTopOf="@id/header"
+        app:layout_constraintStart_toStartOf="@id/header"
+        app:tint="@color/off_white"
+        android:contentDescription="@string/profile_image" />
+
     <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/off_white"
+        app:layout_constraintTop_toTopOf="@id/header"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/AppName"/>
+
+    <ImageView
+        android:id="@+id/menu"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/menu"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintTop_toTopOf="@id/header"
+        app:layout_constraintEnd_toEndOf="@id/header"
+        app:tint="@color/off_white"
+        android:contentDescription="@string/menu_image" />
+
+    <TextView
+        android:id="@+id/motto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/app_motto"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/Motto" />
+
+    <View
+        android:id="@+id/break1"
+        android:layout_width="294dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@id/motto"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/Line"/>
+
+    <EditText
+        android:id="@+id/search_title"
+        android:layout_width="278dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:drawableEnd="@drawable/search"
+        android:hint="@string/enter_text"
+        android:background="@drawable/rounded_edittext"
+        android:padding="10dp"
+        app:layout_constraintTop_toBottomOf="@id/break1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:autofillHints="Title"
+        android:inputType="textCapWords" />
+
+    <TextView
+        android:id="@+id/spoken_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/spoken_title"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/search_title"
+        app:layout_constraintStart_toStartOf="@id/search_title"
+        style="@style/Titles" />
+
+    <Spinner
+        android:id="@+id/spoken_dd"
+        android:layout_width="278dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/spoken_title"
+        app:layout_constraintStart_toStartOf="@id/spoken_title" />
+
+    <TextView
+        android:id="@+id/subtitle_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/subtitle_title"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/spoken_dd"
+        app:layout_constraintStart_toStartOf="@id/search_title"
+        style="@style/Titles" />
+
+    <Spinner
+        android:id="@+id/subtitle_dd"
+        android:layout_width="278dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/subtitle_title"
+        app:layout_constraintStart_toStartOf="@id/search_title" />
+
+    <TextView
+        android:id="@+id/genre_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/spoken_title"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/subtitle_dd"
+        app:layout_constraintStart_toStartOf="@id/search_title"
+        style="@style/Titles" />
+
+    <Spinner
+        android:id="@+id/genre_dd"
+        android:layout_width="278dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/genre_title"
+        app:layout_constraintStart_toStartOf="@id/search_title" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/search"
+        android:textSize="24sp"
+        android:textColor="@color/grey"
+        android:font="@font/forque"
+        app:layout_constraintTop_toBottomOf="@id/genre_dd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/Widget.MaterialComponents.Button.TextButton" />
+
+    <View
+        android:id="@+id/break2"
+        android:layout_width="294dp"
+        android:layout_height="1dp"
+        android:layout_marginBottom="2dp"
+        app:layout_constraintBottom_toBottomOf="@id/search_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/Line"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/search_results"
+        android:layout_width="280dp"
+        android:layout_height="408dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/lt_teal"
+        app:layout_constraintTop_toTopOf="@id/break2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:shapeAppearanceOverlay="@style/RoundedTop" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/movieRecyclerView"
+        android:layout_width="280dp"
+        android:layout_height="408dp"
+        android:padding="20dp"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toTopOf="@id/search_results"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:id="@+id/footer"
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/TopBottom"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">CineSpeak</string>
+    <string name="app_name">CineSpeak!</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="menu_image">Menu Image</string>
+    <string name="app_motto">Learn a language by watching movies!</string>
+    <string name="enter_text">Enter a movie title…</string>
+    <string name="spoken_title">Spoken Language</string>
+    <string name="subtitle_title">Subtitle Language</string>
+    <string name="search">SEARCH!</string>
 </resources>
