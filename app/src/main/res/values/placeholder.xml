@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="lang_array">
+        <item>Any</item>
+        <item>English</item>
+        <item>Chinese</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>Russian</item>
+        <item>Japanese</item>
+        <item>Italian</item>
+        <item>Arabic</item>
+    </string-array>
+    <string-array name="subtitle_array">
+        <item>Any</item>
+        <item>English</item>
+        <item>Chinese</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>Russian</item>
+        <item>Japanese</item>
+        <item>Italian</item>
+        <item>Arabic</item>
+    </string-array>
+    <string-array name="genre_array">
+        <item>Any</item>
+        <item>Action</item>
+        <item>Animation</item>
+        <item>Adventure</item>
+        <item>Comedy</item>
+        <item>Crime</item>
+        <item>Cyberpunk</item>
+        <item>Fantasy</item>
+        <item>Historical</item>
+        <item>Horror</item>
+        <item>Mystery</item>
+        <item>Romance</item>
+        <item>Sci-Fi</item>
+        <item>Slice-of-Life</item>
+        <item>Thriller</item>
+    </string-array>
+</resources>
