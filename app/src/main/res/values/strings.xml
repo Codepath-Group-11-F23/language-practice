@@ -7,4 +7,5 @@
     <string name="spoken_title">Spoken Language</string>
     <string name="subtitle_title">Subtitle Language</string>
     <string name="search">SEARCH!</string>
+    <string name="rating_end">" / 10"</string>
 </resources>
