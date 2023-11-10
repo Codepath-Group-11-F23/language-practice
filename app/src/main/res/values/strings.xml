@@ -8,4 +8,20 @@
     <string name="genre_title">Genre</string>
     <string name="subtitle_title">Subtitle Language</string>
     <string name="search">SEARCH!</string>
+    <string name="movie_image_desc">Placeholder image for movie posters</string>
+    <string name="movie_title_placeholder">Title Placeholder</string>
+    <string name="genre_placeholder">Genre(s) Placeholder</string>
+    <string name="movie_summary_placeholder">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent varius efficitur nisi non
+        mattis. Vestibulum faucibus dui ut porttitor suscipit. Praesent ornare sapien nisl, a
+        venenatis sapien porta id. Morbi vel fringilla tortor. Maecenas risus lectus, malesuada
+        non consequat et, aliquet et ligula. Sed pellentesque ante nec nulla convallis, a venenatis
+        ligula tristique. Etiam non sapien sodales purus varius scelerisque posuere a libero.
+        Suspendisse purus massa, sollicitudin quis libero eget, euismod interdum ipsum. Aenean
+        viverra massa sed lectus semper, sed tristique justo tempor. Aenean sit amet purus lacinia
+        mauris lobortis rutrum ut nec magna. Praesent tincidunt velit dui, nec lobortis odio rutrum
+        nec. Proin at leo eu metus auctor gravida. In maximus lorem quis mauris rutrum, id auctor
+        purus varius. Pellentesque viverra est ac orci tincidunt, ac porttitor lacus volutpat.
+        Maecenas vehicula dolor a velit consequat, ac imperdiet tellus tempus. Vestibulum consequat
+        non erat sit amet vehicula.</string>
 </resources>
