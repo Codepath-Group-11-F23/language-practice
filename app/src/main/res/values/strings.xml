@@ -24,4 +24,5 @@
         purus varius. Pellentesque viverra est ac orci tincidunt, ac porttitor lacus volutpat.
         Maecenas vehicula dolor a velit consequat, ac imperdiet tellus tempus. Vestibulum consequat
         non erat sit amet vehicula.</string>
+    <string name="rating_end">" / 10"</string>
 </resources>
