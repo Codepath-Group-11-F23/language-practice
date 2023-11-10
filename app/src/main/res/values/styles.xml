@@ -34,11 +34,28 @@
         <item name="cornerSizeBottomRight">15%</item>
     </style>
 
+    <style name="RoundedTop2">
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerSizeTopLeft">10%</item>
+        <item name="cornerSizeTopRight">10%</item>
+        <item name="cornerSizeBottomLeft">10%</item>
+        <item name="cornerSizeBottomRight">10%</item>
+    </style>
+
     <style name="AppName">
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:textSize">32sp</item>
         <item name="android:text">@string/app_name</item>
     </style>
 
+    <style name="DropDown">
+    </style>
+
+    <style name="MovieTitle">
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:text">@string/app_name</item>
+    </style>
 
 </resources>
