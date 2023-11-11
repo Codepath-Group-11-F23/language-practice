@@ -49,13 +49,16 @@
         <item name="android:text">@string/app_name</item>
     </style>
 
-    <style name="DropDown">
-    </style>
-
     <style name="MovieTitle">
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:textSize">32sp</item>
         <item name="android:text">@string/app_name</item>
+    </style>
+
+    <style name="cardElements">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/montserratbold</item>
     </style>
 
 </resources>
