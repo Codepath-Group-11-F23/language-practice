@@ -27,6 +27,9 @@ import org.json.JSONObject
 class MainActivity: AppCompatActivity(){
 
     private val genreIdToNameMap = mutableMapOf<Int, String>()
+
+    lateinit var genres: List<Map<String, Any>>
+    lateinit var languages: List<Map<String, Any>>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,20 +48,20 @@ class MainActivity: AppCompatActivity(){
 
         // placeholder arrays for spinner population (REPLACE THIS WITH
         // ACTUAL LISTS FROM TMDB)
-        val spokeOptions = R.array.lang_array
-        val genreOptions = R.array.genre_array
+//        val spokeOptions = R.array.lang_array
+//        val genreOptions = R.array.genre_array
 
         // set the entries for the spinners
-        populateSpinner(spokeSpin, spokeOptions)
-        populateSpinner(genreSpin, genreOptions)
+//        populateSpinner(spokeSpin, spokeOptions)
+//        populateSpinner(genreSpin, genreOptions)
 
         // Call the functions to fetch genre and language data
         getMovieGenres()
         getConfigurationLanguages()
 
         // set up variables for spoken language and genre
-        var selectLang = "Any";
-        var selectGenre = "Any";
+        var selectLang = "";
+        var selectGenre = "";
         var searchQuery = "";
 
         /* create mutable list of maps (key-value dictionary pairs) to grab appropriate fields for
@@ -87,8 +90,7 @@ class MainActivity: AppCompatActivity(){
             override fun onItemSelected(p0: AdapterView<*>, p1: View?, p2: Int, p3: Long) {
                 val itemSelect = spokeSpin.getItemAtPosition(p2) as String
                 // CHANGE THIS TO DEFAULT OPTION
-                if (itemSelect == "Any"){
-                    selectLang = itemSelect
+                if (itemSelect == "No Language"){
                     button.visibility = View.GONE
                 } else {
                     selectLang = itemSelect
@@ -97,7 +99,7 @@ class MainActivity: AppCompatActivity(){
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                if (selectLang == "Any"){
+                if (selectLang == ""){
                     button.visibility = View.GONE
                 }
             }
@@ -107,17 +109,14 @@ class MainActivity: AppCompatActivity(){
             override fun onItemSelected(p0: AdapterView<*>, p1: View?, p2: Int, p3: Long) {
                 val itemSelect = genreSpin.getItemAtPosition(p2) as String
                 // CHANGE THIS TO DEFAULT OPTION
-                if (itemSelect == "Any"){
+                if (itemSelect != "None"){
                     selectGenre = itemSelect
-                    button.visibility = View.GONE
-                } else {
-                    selectGenre = itemSelect
-                    button.visibility = View.VISIBLE
                 }
+                button.visibility = View.VISIBLE
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                button.visibility = View.GONE
+                button.visibility = View.VISIBLE
             }
         }
 
@@ -138,17 +137,19 @@ class MainActivity: AppCompatActivity(){
         /* Set click action for search (right now set to making toasts,
         will need API team to hook up the keyword, language, genre query request*/
         button.setOnClickListener{
-            var toastText = "Spoken: $selectLang, Genre: $selectGenre, Keyword(s)$searchQuery"
-            Toast.makeText(this, toastText, Toast.LENGTH_LONG).show()
+            if(selectLang == "") {
+                var toastText = "PLEASE CHOOSE A SPOKEN LANGUAGE"
+                Toast.makeText(this, toastText, Toast.LENGTH_LONG).show()
+            } else {
+                // Make the API request with the selected parameters
+                makeApiRequest(selectLang, selectGenre, searchQuery)
 
-            // Make the API request with the selected parameters
-            makeApiRequest(selectLang, selectGenre, searchQuery)
-
-            // populates the recyclerview (will need to fix this approach if possible)
-            val recycleAdapter = MovieAdapter(arrayOfMovies)
-            recyclerView.adapter = recycleAdapter
-            recyclerView.layoutManager = LinearLayoutManager(this)
-            recyclerView.visibility = View.VISIBLE
+                // populates the recyclerview (will need to fix this approach if possible)
+                val recycleAdapter = MovieAdapter(arrayOfMovies)
+                recyclerView.adapter = recycleAdapter
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                recyclerView.visibility = View.VISIBLE
+            }
         }
 
         // Create methods to grab movie data (TODO API/backend team)
@@ -166,12 +167,9 @@ class MainActivity: AppCompatActivity(){
 
                 if (!responseBody.isNullOrBlank()) {
                     // Parse the JSON response for movie genres
-                    val genres = parseMovieGenres(JSONObject(responseBody))
+                    genres = parseMovieGenres(JSONObject(responseBody))
                     // Handle the parsed genres
                     Log.d("getMovieGenres", "Movie genres: $genres")
-
-                    // Populate the genre spinner with the obtained genres
-                    populateGenreSpinner(genres)
                 }
             }
 
@@ -187,14 +185,11 @@ class MainActivity: AppCompatActivity(){
         })
     }
 
-    private fun populateGenreSpinner(genres: List<Map<String, Any>>) {
+    private fun populateGenreSpinner(genres: List<String>) {
         val genreSpin: Spinner = findViewById(R.id.genre_dd)
 
-        // Extract genre names from the list
-        val genreNames = genres.map { it["name"] as String }.toTypedArray()
-
         // Create an ArrayAdapter using the string array and a default spinner layout
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, genreNames)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, genres.toTypedArray())
 
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -205,19 +200,26 @@ class MainActivity: AppCompatActivity(){
 
     private fun parseMovieGenres(response: JSONObject): List<Map<String, Any>> {
         val genresList = mutableListOf<Map<String, Any>>()
+        val genres = mutableListOf<String>()
+        genres.add("None")
 
         // Check if the response contains the "genres" array
         if (response.has("genres")) {
             val genresArray = response.getJSONArray("genres")
             for (i in 0 until genresArray.length()) {
                 val genreObject = genresArray.getJSONObject(i)
+                val genreName = genreObject.getString("name")
                 val genreMap = mapOf(
                     "id" to genreObject.getInt("id"),
-                    "name" to genreObject.getString("name")
+                    "name" to genreName
                 )
                 genresList.add(genreMap)
+                genres.add(genreName)
             }
         }
+
+        // Populate the genre spinner with the obtained genres
+        populateGenreSpinner(genres)
 
         return genresList
     }
@@ -234,12 +236,9 @@ class MainActivity: AppCompatActivity(){
                 if (!responseBody.isNullOrBlank()) {
                     try {
                         // Parse the JSON response for configuration languages
-                        val languages = parseConfigurationLanguages(JSONArray(responseBody))
+                        languages = parseConfigurationLanguages(JSONArray(responseBody))
                         // Handle the parsed languages
                         Log.d("getConfigurationLanguages", "Configuration languages: $languages")
-
-                        // Populate the languages spinner with the obtained languages
-                        populateLanguagesSpinner(languages)
 
                     } catch (e: JSONException) {
                         Log.e("getConfigurationLanguages", "Error parsing JSON array", e)
@@ -261,18 +260,22 @@ class MainActivity: AppCompatActivity(){
         })
     }
 
-    private fun parseConfigurationLanguages(response: JSONArray): List<String> {
-        val languagesList = mutableListOf<String>()
+    private fun parseConfigurationLanguages(response: JSONArray): List<Map<String, Any>> {
+        val languagesList = mutableListOf<Map<String, Any>>()
+        val languageNames = mutableListOf<String>()
 
         for (i in 0 until response.length()) {
             val languageObject = response.getJSONObject(i)
-            val languageName = languageObject.optString("name", "")
-
-            // Ignore empty or null languages
-            if (languageName.isNotBlank()) {
-                languagesList.add(languageName)
-            }
+            val langName = languageObject.getString("english_name")
+            val languageMap = mapOf(
+                "id" to languageObject.getString("iso_639_1"),
+                "name" to langName
+            )
+            languagesList.add(languageMap)
+            languageNames.add(langName)
         }
+        // Populate the languages spinner with the obtained languages
+        populateLanguagesSpinner(languageNames)
 
         return languagesList
     }
@@ -370,20 +373,20 @@ class MainActivity: AppCompatActivity(){
     }
 
     // set adapters for spinners
-    private fun populateSpinner(
-        item: Spinner,
-        array: Int
-    ){
-        // populate the dropdowns/spinners
-        // see https://developer.android.com/develop/ui/views/components/spinner
-        ArrayAdapter.createFromResource(
-            this,
-            array,
-            android.R.layout.simple_spinner_item
-        ).also {adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            item.adapter = adapter
-        }
-    }
+//    private fun populateSpinner(
+//        item: Spinner,
+//        array: Int
+//    ){
+//        // populate the dropdowns/spinners
+//        // see https://developer.android.com/develop/ui/views/components/spinner
+//        ArrayAdapter.createFromResource(
+//            this,
+//            array,
+//            android.R.layout.simple_spinner_item
+//        ).also {adapter ->
+//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//            item.adapter = adapter
+//        }
+//    }
 
 }
