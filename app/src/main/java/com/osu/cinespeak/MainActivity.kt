@@ -28,8 +28,8 @@ class MainActivity: AppCompatActivity(){
 
     private val genreIdToNameMap = mutableMapOf<Int, String>()
 
-    lateinit var genres: List<Map<String, Any>>
-    lateinit var languages: List<Map<String, Any>>
+    lateinit var genres: HashMap<String, Int>
+    lateinit var languages: HashMap<String, String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -60,9 +60,9 @@ class MainActivity: AppCompatActivity(){
         getConfigurationLanguages()
 
         // set up variables for spoken language and genre
-        var selectLang = "";
-        var selectGenre = "";
-        var searchQuery = "";
+        var selectLang = ""
+        var selectGenre = ""
+        var searchQuery = ""
 
         /* create mutable list of maps (key-value dictionary pairs) to grab appropriate fields for
         recyclerview adapter (PLACEHOLDER)*/
@@ -141,8 +141,17 @@ class MainActivity: AppCompatActivity(){
                 var toastText = "PLEASE CHOOSE A SPOKEN LANGUAGE"
                 Toast.makeText(this, toastText, Toast.LENGTH_LONG).show()
             } else {
-                // Make the API request with the selected parameters
-                makeApiRequest(selectLang, selectGenre, searchQuery)
+                if(searchQuery == "") {
+                    //use discover api endpoint
+                    makeDiscoverApiRequest(selectLang, selectGenre)
+                } else {
+                    //use search api endpoint
+                    makeSearchApiRequest(selectLang, selectGenre, searchQuery)
+                }
+                // Clear search parameters
+                var selectLang = ""
+                var selectGenre = ""
+                var searchQuery = ""
 
                 // populates the recyclerview (will need to fix this approach if possible)
                 val recycleAdapter = MovieAdapter(arrayOfMovies)
@@ -198,8 +207,8 @@ class MainActivity: AppCompatActivity(){
         genreSpin.adapter = adapter
     }
 
-    private fun parseMovieGenres(response: JSONObject): List<Map<String, Any>> {
-        val genresList = mutableListOf<Map<String, Any>>()
+    private fun parseMovieGenres(response: JSONObject): HashMap<String, Int> {
+        val genresMap = HashMap<String, Int>()
         val genres = mutableListOf<String>()
         genres.add("None")
 
@@ -209,11 +218,8 @@ class MainActivity: AppCompatActivity(){
             for (i in 0 until genresArray.length()) {
                 val genreObject = genresArray.getJSONObject(i)
                 val genreName = genreObject.getString("name")
-                val genreMap = mapOf(
-                    "id" to genreObject.getInt("id"),
-                    "name" to genreName
-                )
-                genresList.add(genreMap)
+                val genreId = genreObject.getInt("id")
+                genresMap.put(genreName, genreId)
                 genres.add(genreName)
             }
         }
@@ -221,7 +227,7 @@ class MainActivity: AppCompatActivity(){
         // Populate the genre spinner with the obtained genres
         populateGenreSpinner(genres)
 
-        return genresList
+        return genresMap
     }
 
     private fun getConfigurationLanguages() {
@@ -260,24 +266,21 @@ class MainActivity: AppCompatActivity(){
         })
     }
 
-    private fun parseConfigurationLanguages(response: JSONArray): List<Map<String, Any>> {
-        val languagesList = mutableListOf<Map<String, Any>>()
+    private fun parseConfigurationLanguages(response: JSONArray): HashMap<String,String> {
+        val languagesMap = HashMap<String, String>()
         val languageNames = mutableListOf<String>()
 
         for (i in 0 until response.length()) {
             val languageObject = response.getJSONObject(i)
             val langName = languageObject.getString("english_name")
-            val languageMap = mapOf(
-                "id" to languageObject.getString("iso_639_1"),
-                "name" to langName
-            )
-            languagesList.add(languageMap)
+            val langId = languageObject.getString("iso_639_1")
+            languagesMap.put(langName, langId)
             languageNames.add(langName)
         }
         // Populate the languages spinner with the obtained languages
         populateLanguagesSpinner(languageNames)
 
-        return languagesList
+        return languagesMap
     }
 
     private fun populateLanguagesSpinner(languages: List<String>) {
@@ -293,15 +296,19 @@ class MainActivity: AppCompatActivity(){
         spokeSpin.adapter = adapter
     }
 
-    private fun makeApiRequest(language: String, genre: String?, query: String) {
+    private fun makeDiscoverApiRequest(language: String, genre: String?) {
         val client = AsyncHttpClient()
-        val apiUrl = "https://api.themoviedb.org/3/search/movie"
+        val apiUrl = "https://api.themoviedb.org/3/discover/movie"
 
         val params = RequestParams()
-        params["language"] = language
-        params["query"] = query
-        genre?.let { params["with_genres"] = it }
         params["api_key"] = "d027ce23bad3a259cffc5f57a3fbeb09"
+        params["include_adult"] = "false"
+        val langId = languages[language]
+        params["with_original_language"] = langId
+        if(genre != "") {
+            val genreId = genres[genre]
+            params["with_genres"] = genreId.toString()
+        }
 
         client.get(apiUrl, params, object : TextHttpResponseHandler() {
             override fun onSuccess(statusCode: Int, headers: Headers?, responseBody: String?) {
@@ -309,9 +316,43 @@ class MainActivity: AppCompatActivity(){
                 if (!responseBody.isNullOrBlank()) {
                     // Parse the JSON response
                     val movies = parseMovies(JSONObject(responseBody))
-                    Log.d("searchCriteria", "Queried data: $language, $genre, $query")
+                    Log.d("searchCriteria", "Queried data: $language, $genre")
                     Log.d("getMovieList", "Queried Movies: $movies")
-                    updateUIWithMovies(movies)
+//                    updateUIWithMovies(movies)
+                }
+            }
+
+            override fun onFailure(
+                statusCode: Int,
+                headers: Headers?,
+                responseString: String?,
+                throwable: Throwable?
+            ) {
+                // Handle the failure
+                Log.e("APIRequest", "Failed to fetch movies. Status code: $statusCode")
+            }
+        })
+    }
+
+    private fun makeSearchApiRequest(language: String, genre: String?, title: String) {
+        val client = AsyncHttpClient()
+        val apiUrl = "https://api.themoviedb.org/3/search/movie"
+
+        val params = RequestParams()
+        params["api_key"] = "d027ce23bad3a259cffc5f57a3fbeb09"
+        params["include_adult"] = "false"
+        params["query"] = title
+
+        client.get(apiUrl, params, object : TextHttpResponseHandler() {
+            override fun onSuccess(statusCode: Int, headers: Headers?, responseBody: String?) {
+                // Handle the successful response here
+                if (!responseBody.isNullOrBlank()) {
+                    // Parse the JSON response
+                    val movies = parseMovies(JSONObject(responseBody))
+                    Log.d("searchCriteria", "Queried data: $language, $genre")
+                    Log.d("getMovieList", "Queried Movies: $movies")
+                    //filter movies with matching genre (genre_ids) and language (original_language)
+//                    updateUIWithMovies(movies)
                 }
             }
 
@@ -332,30 +373,30 @@ class MainActivity: AppCompatActivity(){
         val moviesList = mutableListOf<Map<String, String>>()
 
         // Check if the response contains the "results" array
-        if (response.has("results")) {
-            val resultsArray = response.getJSONArray("results")
-            for (i in 0 until resultsArray.length()) {
-                val movieObject = resultsArray.getJSONObject(i)
-                val genresArray = movieObject.getJSONArray("genre_ids")
-
-                val genreList = mutableListOf<String>()
-                for (j in 0 until genresArray.length()) {
-                    val genreId = genresArray.getInt(j)
-                    // Assuming you have a function to get the genre name based on genreId
-                    val genreName = genreIdToNameMap[genreId] ?: ""
-                    if (genreName.isNotEmpty()) {
-                        genreList.add(genreName)
-                    }
-                }
-                val movieMap = mapOf(
-                    "poster_path" to movieObject.getString("poster_path"),
-                    "title" to movieObject.getString("title"),
-                    "genre" to genreList.joinToString(", "),
-                    "runtime" to movieObject.getString("runtime")
-                )
-                moviesList.add(movieMap)
-            }
-        }
+//        if (response.has("results")) {
+//            val resultsArray = response.getJSONArray("results")
+//            for (i in 0 until resultsArray.length()) {
+//                val movieObject = resultsArray.getJSONObject(i)
+//                val genresArray = movieObject.getJSONArray("genre_ids")
+//
+//                val genreList = mutableListOf<String>()
+//                for (j in 0 until genresArray.length()) {
+//                    val genreId = genresArray.getInt(j)
+//                    // Assuming you have a function to get the genre name based on genreId
+//                    val genreName = genreIdToNameMap[genreId] ?: ""
+//                    if (genreName.isNotEmpty()) {
+//                        genreList.add(genreName)
+//                    }
+//                }
+//                val movieMap = mapOf(
+//                    "poster_path" to movieObject.getString("poster_path"),
+//                    "title" to movieObject.getString("title"),
+//                    "genre" to genreList.joinToString(", "),
+//                    "runtime" to movieObject.getString("runtime")
+//                )
+//                moviesList.add(movieMap)
+//            }
+//        }
 
         return moviesList
     }
