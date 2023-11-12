@@ -52,6 +52,10 @@ class MainActivity: AppCompatActivity(){
         populateSpinner(spokeSpin, spokeOptions)
         populateSpinner(genreSpin, genreOptions)
 
+        // Call the functions to fetch genre and language data
+        getMovieGenres()
+        getConfigurationLanguages()
+
         // set up variables for spoken language and genre
         var selectLang = "Any";
         var selectGenre = "Any";
@@ -69,9 +73,6 @@ class MainActivity: AppCompatActivity(){
                 "genre" to "Action, Adventure",
                 "runtime" to "92")
         )
-        // Call the functions to fetch genre and language data
-        getMovieGenres()
-        getConfigurationLanguages()
 
         // get search button
         val button: MaterialButton = findViewById(R.id.search_button)
@@ -90,6 +91,7 @@ class MainActivity: AppCompatActivity(){
                     selectLang = itemSelect
                     button.visibility = View.GONE
                 } else {
+                    selectLang = itemSelect
                     button.visibility = View.VISIBLE
                 }
             }
@@ -109,6 +111,7 @@ class MainActivity: AppCompatActivity(){
                     selectGenre = itemSelect
                     button.visibility = View.GONE
                 } else {
+                    selectGenre = itemSelect
                     button.visibility = View.VISIBLE
                 }
             }
@@ -166,6 +169,9 @@ class MainActivity: AppCompatActivity(){
                     val genres = parseMovieGenres(JSONObject(responseBody))
                     // Handle the parsed genres
                     Log.d("getMovieGenres", "Movie genres: $genres")
+
+                    // Populate the genre spinner with the obtained genres
+                    populateGenreSpinner(genres)
                 }
             }
 
@@ -179,6 +185,22 @@ class MainActivity: AppCompatActivity(){
                 Log.e("getMovieGenres", "Failed to fetch movie genres. Status code: $statusCode")
             }
         })
+    }
+
+    private fun populateGenreSpinner(genres: List<Map<String, Any>>) {
+        val genreSpin: Spinner = findViewById(R.id.genre_dd)
+
+        // Extract genre names from the list
+        val genreNames = genres.map { it["name"] as String }.toTypedArray()
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, genreNames)
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        // Apply the adapter to the spinner
+        genreSpin.adapter = adapter
     }
 
     private fun parseMovieGenres(response: JSONObject): List<Map<String, Any>> {
@@ -215,6 +237,10 @@ class MainActivity: AppCompatActivity(){
                         val languages = parseConfigurationLanguages(JSONArray(responseBody))
                         // Handle the parsed languages
                         Log.d("getConfigurationLanguages", "Configuration languages: $languages")
+
+                        // Populate the languages spinner with the obtained languages
+                        populateLanguagesSpinner(languages)
+
                     } catch (e: JSONException) {
                         Log.e("getConfigurationLanguages", "Error parsing JSON array", e)
                     }
@@ -240,12 +266,28 @@ class MainActivity: AppCompatActivity(){
 
         for (i in 0 until response.length()) {
             val languageObject = response.getJSONObject(i)
-            // Assuming each language object has a key like "name" for the language name
             val languageName = languageObject.optString("name", "")
-            languagesList.add(languageName)
+
+            // Ignore empty or null languages
+            if (languageName.isNotBlank()) {
+                languagesList.add(languageName)
+            }
         }
 
         return languagesList
+    }
+
+    private fun populateLanguagesSpinner(languages: List<String>) {
+        val spokeSpin: Spinner = findViewById(R.id.spoken_dd)
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, languages.toTypedArray())
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        // Apply the adapter to the spinner
+        spokeSpin.adapter = adapter
     }
 
     private fun makeApiRequest(language: String, genre: String?, query: String) {
@@ -264,6 +306,8 @@ class MainActivity: AppCompatActivity(){
                 if (!responseBody.isNullOrBlank()) {
                     // Parse the JSON response
                     val movies = parseMovies(JSONObject(responseBody))
+                    Log.d("searchCriteria", "Queried data: $language, $genre, $query")
+                    Log.d("getMovieList", "Queried Movies: $movies")
                     updateUIWithMovies(movies)
                 }
             }
