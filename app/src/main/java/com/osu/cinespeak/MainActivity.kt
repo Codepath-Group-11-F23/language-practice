@@ -155,10 +155,11 @@ class MainActivity: AppCompatActivity(){
                     //use search api endpoint
                     makeSearchApiRequest(selectLang, selectGenre, selectTitle)
                 }
-                // Clear search parameters
-                selectLang = ""
-                selectGenre = ""
-                selectTitle = ""
+
+                // hides the keyboard when the search button is clicked
+                val inputMethodManager =
+                    getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(searchBar.windowToken, 0)
 
                 // populates the recyclerview (will need to fix this approach if possible)
                 val searchResultsImageView: ShapeableImageView = findViewById(R.id.search_results)
