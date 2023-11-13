@@ -2,6 +2,7 @@ package com.osu.cinespeak
 
 import android.content.Context
 import android.os.Bundle
+import android.util.ArrayMap
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -66,20 +67,55 @@ class MainActivity: AppCompatActivity(){
 
         /* create mutable list of maps (key-value dictionary pairs) to grab appropriate fields for
         recyclerview adapter (PLACEHOLDER)*/
-        /*
-        var arrayOfMovies = arrayOf(
-
-            mapOf("poster_path" to "https://images.dog.ceo/breeds/bullterrier-staffordshire/n02093256_540.jpg",
-                "title" to "The Super Mario Bros. Movie",
-                "genre" to "Action, Adventure",
-                "runtime" to "92"),
-            mapOf("poster_path" to "https://images.dog.ceo/breeds/hound-ibizan/n02091244_595.jpg",
-                "title" to "The Super Mario Bros. Movie",
-                "genre" to "Action, Adventure",
-                "runtime" to "92")
-
-        ) */
         var arrayOfMovies: Array<Map<String, String>> = emptyArray()
+
+        /* create a hashmap of the genre id to genre to replace genre ids with actual names
+        * TODO: use either the str or the int variation to replace the genre ids with the
+        *  actual names before you send it off to the adapter */
+
+        var numIdsToGenre = mapOf<Int, String>(
+            28 to "Action",
+            12 to "Adventure",
+            16 to "Animation",
+            35 to "Comedy",
+            80 to "Crime",
+            99 to "Documentary",
+            18 to "Drama",
+            10751 to "Family",
+            14 to "Fantasy",
+            36 to "History",
+            27 to "Horror",
+            10402 to "Music",
+            9648 to "Mystery",
+            10749 to "Romance",
+            878 to "Science Fiction",
+            10770 to "TV Movie",
+            53 to "Thriller",
+            10752 to "War",
+            37 to "Western"
+        )
+
+        var strIdsToGenre = mapOf<String, String>(
+            "28" to "Action",
+            "12" to "Adventure",
+            "16" to "Animation",
+            "35" to "Comedy",
+            "80" to "Crime",
+            "99" to "Documentary",
+            "18" to "Drama",
+            "10751" to "Family",
+            "14" to "Fantasy",
+            "36" to "History",
+            "27" to "Horror",
+            "10402" to "Music",
+            "9648" to "Mystery",
+            "10749" to "Romance",
+            "878" to "Science Fiction",
+            "10770" to "TV Movie",
+            "53" to "Thriller",
+            "10752" to "War",
+            "37" to "Western"
+        )
 
         // get search button
         val button: MaterialButton = findViewById(R.id.search_button)
@@ -469,22 +505,5 @@ class MainActivity: AppCompatActivity(){
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.visibility = View.VISIBLE
     }
-
-    // set adapters for spinners
-//    private fun populateSpinner(
-//        item: Spinner,
-//        array: Int
-//    ){
-//        // populate the dropdowns/spinners
-//        // see https://developer.android.com/develop/ui/views/components/spinner
-//        ArrayAdapter.createFromResource(
-//            this,
-//            array,
-//            android.R.layout.simple_spinner_item
-//        ).also {adapter ->
-//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//            item.adapter = adapter
-//        }
-//    }
 
 }
