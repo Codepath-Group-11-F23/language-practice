@@ -1,9 +1,13 @@
 package com.osu.cinespeak
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.ArrayMap
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -19,6 +23,7 @@ import com.codepath.asynchttpclient.AsyncHttpClient
 import com.codepath.asynchttpclient.RequestParams
 import com.codepath.asynchttpclient.callback.TextHttpResponseHandler
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.imageview.ShapeableImageView
 import okhttp3.Headers
 import org.json.JSONArray
 import org.json.JSONException
@@ -31,6 +36,7 @@ class MainActivity: AppCompatActivity(){
 
     lateinit var genres: HashMap<String, Int>
     lateinit var languages: HashMap<String, String>
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -97,22 +103,52 @@ class MainActivity: AppCompatActivity(){
         /*
         Set up search field edit and grab keyword(s) upon completion, then closes keyboard
         */
-        searchBar.setOnEditorActionListener{ _, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE){
-                val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        searchBar.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // Hide the keyboard
+                val keyboard =
+                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 keyboard.hideSoftInputFromWindow(searchBar.windowToken, 0)
+
+                // Store the entered text
                 selectTitle = searchBar.text.toString()
 
+                // Log the entered text for debugging
+                Log.d("EditorActionListener", "Entered text: $selectTitle")
+
+                // Return true to indicate that you've handled the action
                 return@setOnEditorActionListener true
             }
-            return@setOnEditorActionListener false
+
+            // Return false for other actions
+            false
         }
+
+        // Set a TextWatcher to capture changes in the EditText text
+        searchBar.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                // This method is called to notify you that somewhere within s, the text has been changed
+                // Update selectTitle here
+                selectTitle = s?.toString() ?: ""
+
+                // Log the entered text for debugging
+                Log.d("TextWatcher", "Entered text: $selectTitle")
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // This method is called to notify you that somewhere within s, the text is about to be changed
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // This method is called to notify you that somewhere within s, the text has been changed
+            }
+        })
 
         /* Set click action for search (right now set to making toasts,
         will need API team to hook up the keyword, language, genre query request*/
         button.setOnClickListener{
             if(selectLang == "") {
-                var toastText = "PLEASE CHOOSE A SPOKEN LANGUAGE"
+                val toastText = "PLEASE CHOOSE A SPOKEN LANGUAGE"
                 Toast.makeText(this, toastText, Toast.LENGTH_LONG).show()
             } else {
                 if(selectTitle == "") {
@@ -128,6 +164,8 @@ class MainActivity: AppCompatActivity(){
                 var selectTitle = ""
 
                 // populates the recyclerview (will need to fix this approach if possible)
+                val searchResultsImageView: ShapeableImageView = findViewById(R.id.search_results)
+                searchResultsImageView.visibility = View.VISIBLE
                 val recycleAdapter = MovieAdapter(arrayOfMovies)
                 recyclerView.adapter = recycleAdapter
                 recyclerView.layoutManager = LinearLayoutManager(this)
@@ -236,7 +274,7 @@ class MainActivity: AppCompatActivity(){
         })
     }
 
-    private fun parseConfigurationLanguages(response: JSONArray): HashMap<String,String> {
+    private fun parseConfigurationLanguages(response: JSONArray): HashMap<String, String> {
         val languagesMap = HashMap<String, String>()
         val languageNames = mutableListOf<String>()
 
@@ -244,9 +282,16 @@ class MainActivity: AppCompatActivity(){
             val languageObject = response.getJSONObject(i)
             val langName = languageObject.getString("english_name")
             val langId = languageObject.getString("iso_639_1")
-            languagesMap.put(langName, langId)
+            languagesMap[langName] = langId
             languageNames.add(langName)
         }
+
+        // Sort the language names alphabetically
+        languageNames.sort()
+
+        // Add "No Language" as the first item
+        languageNames.add(0, "No Language")
+
         // Populate the languages spinner with the obtained languages
         populateLanguagesSpinner(languageNames)
 

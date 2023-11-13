@@ -87,27 +87,27 @@
         android:inputType="textCapWords" />
 
     <TextView
-        android:id="@+id/asterisk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/asterisk"
-        android:textColor="@android:color/holo_red_light"
-        app:layout_constraintTop_toBottomOf="@id/search_title"
-        app:layout_constraintStart_toStartOf="@id/search_title"
-        style="@style/Titles"/>
-
-    <TextView
         android:id="@+id/spoken_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:paddingStart="4dp"
         android:text="@string/spoken_title"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/search_title"
-        app:layout_constraintStart_toEndOf="@id/asterisk"
+        app:layout_constraintStart_toStartOf="@id/search_title"
         style="@style/Titles" />
+
+    <TextView
+        android:id="@+id/asterisk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:paddingStart="4dp"
+        android:text="@string/asterisk"
+        android:textColor="@android:color/holo_red_light"
+        app:layout_constraintTop_toBottomOf="@id/search_title"
+        app:layout_constraintStart_toEndOf="@id/spoken_title"
+        style="@style/Titles"/>
 
 
     <Spinner
@@ -168,6 +168,7 @@
         android:layout_height="503dp"
         android:layout_marginTop="20dp"
         android:background="@color/lt_teal"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/break2"
