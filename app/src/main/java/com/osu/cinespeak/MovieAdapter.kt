@@ -10,6 +10,13 @@ import com.bumptech.glide.Glide
 
 class MovieAdapter(val movieCollection: Array<Map<String, Any>>):
     RecyclerView.Adapter<MovieAdapter.ViewHolder>()  {
+
+    private var onClickListener: OnClickListener? = null
+
+    interface OnClickListener {
+        fun onClick(position: Int, movie: Map<String, Any>)
+    }
+
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val movieImage: ImageView
         val favImage: ImageView
@@ -50,5 +57,14 @@ class MovieAdapter(val movieCollection: Array<Map<String, Any>>):
         .centerCrop()
         .into(holder.movieImage)
 
+        holder.itemView.setOnClickListener {
+            if(onClickListener != null) {
+                onClickListener!!.onClick(position, movieCollection[position])
+            }
+        }
+    }
+
+    fun setOnClickListener(onClickListener: OnClickListener) {
+        this.onClickListener = onClickListener
     }
 }
