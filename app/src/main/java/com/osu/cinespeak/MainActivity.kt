@@ -66,7 +66,9 @@ class MainActivity: AppCompatActivity(){
 
         /* create mutable list of maps (key-value dictionary pairs) to grab appropriate fields for
         recyclerview adapter (PLACEHOLDER)*/
+        /*
         var arrayOfMovies = arrayOf(
+
             mapOf("poster_path" to "https://images.dog.ceo/breeds/bullterrier-staffordshire/n02093256_540.jpg",
                 "title" to "The Super Mario Bros. Movie",
                 "genre" to "Action, Adventure",
@@ -75,7 +77,9 @@ class MainActivity: AppCompatActivity(){
                 "title" to "The Super Mario Bros. Movie",
                 "genre" to "Action, Adventure",
                 "runtime" to "92")
-        )
+
+        ) */
+        var arrayOfMovies: Array<Map<String, String>> = emptyArray()
 
         // get search button
         val button: MaterialButton = findViewById(R.id.search_button)
@@ -434,7 +438,7 @@ class MainActivity: AppCompatActivity(){
                             "original_language" to movieObject.getString("original_language")
                         )
 //                        TODO(Make movieMap type match the movie collection in MovieAdapter.kt)
-                        moviesList.add(movieMap)
+                        moviesList.add(movieMap as Map<String, String>)
                     } else if (hasGenre) {
                         val movieMap = mapOf(
                             "poster_path" to movieObject.getString("poster_path"),
@@ -443,7 +447,7 @@ class MainActivity: AppCompatActivity(){
                             "rating" to if (movieObject.has("vote_average")) movieObject.getString("vote_average") else "",
                             "original_language" to movieObject.getString("original_language")
                         )
-                        moviesList.add(movieMap)
+                        moviesList.add(movieMap as Map<String, String>)
                     }
 
                 }
