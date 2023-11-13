@@ -34,88 +34,22 @@ class MainActivity: AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // set default view
         setContentView(R.layout.activity_main)
-
-        // initialize the filter parameters
-        // Add methods here
-
-        // access to the searchbar
         val searchBar: EditText = findViewById(R.id.search_title)
 
-        // access the spinner elements themselves
         val spokeSpin: Spinner  = findViewById(R.id.spoken_dd)
         val genreSpin: Spinner = findViewById(R.id.genre_dd)
 
-        // placeholder arrays for spinner population (REPLACE THIS WITH
-        // ACTUAL LISTS FROM TMDB)
-//        val spokeOptions = R.array.lang_array
-//        val genreOptions = R.array.genre_array
-
-        // set the entries for the spinners
-//        populateSpinner(spokeSpin, spokeOptions)
-//        populateSpinner(genreSpin, genreOptions)
-
-        // Call the functions to fetch genre and language data
         getMovieGenres()
         getConfigurationLanguages()
 
-        // set up variables for spoken language and genre
         var selectLang = ""
         var selectGenre = ""
-        var searchQuery = ""
+        var selectTitle = ""
 
         /* create mutable list of maps (key-value dictionary pairs) to grab appropriate fields for
         recyclerview adapter (PLACEHOLDER)*/
         var arrayOfMovies: Array<Map<String, String>> = emptyArray()
-
-        /* create a hashmap of the genre id to genre to replace genre ids with actual names
-        * TODO: use either the str or the int variation to replace the genre ids with the
-        *  actual names before you send it off to the adapter */
-
-        var numIdsToGenre = mapOf<Int, String>(
-            28 to "Action",
-            12 to "Adventure",
-            16 to "Animation",
-            35 to "Comedy",
-            80 to "Crime",
-            99 to "Documentary",
-            18 to "Drama",
-            10751 to "Family",
-            14 to "Fantasy",
-            36 to "History",
-            27 to "Horror",
-            10402 to "Music",
-            9648 to "Mystery",
-            10749 to "Romance",
-            878 to "Science Fiction",
-            10770 to "TV Movie",
-            53 to "Thriller",
-            10752 to "War",
-            37 to "Western"
-        )
-
-        var strIdsToGenre = mapOf<String, String>(
-            "28" to "Action",
-            "12" to "Adventure",
-            "16" to "Animation",
-            "35" to "Comedy",
-            "80" to "Crime",
-            "99" to "Documentary",
-            "18" to "Drama",
-            "10751" to "Family",
-            "14" to "Fantasy",
-            "36" to "History",
-            "27" to "Horror",
-            "10402" to "Music",
-            "9648" to "Mystery",
-            "10749" to "Romance",
-            "878" to "Science Fiction",
-            "10770" to "TV Movie",
-            "53" to "Thriller",
-            "10752" to "War",
-            "37" to "Western"
-        )
 
         // get search button
         val button: MaterialButton = findViewById(R.id.search_button)
@@ -167,7 +101,7 @@ class MainActivity: AppCompatActivity(){
             if (actionId == EditorInfo.IME_ACTION_DONE){
                 val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 keyboard.hideSoftInputFromWindow(searchBar.windowToken, 0)
-                searchQuery = searchBar.text.toString()
+                selectTitle = searchBar.text.toString()
 
                 return@setOnEditorActionListener true
             }
@@ -181,17 +115,17 @@ class MainActivity: AppCompatActivity(){
                 var toastText = "PLEASE CHOOSE A SPOKEN LANGUAGE"
                 Toast.makeText(this, toastText, Toast.LENGTH_LONG).show()
             } else {
-                if(searchQuery == "") {
+                if(selectTitle == "") {
                     //use discover api endpoint
                     makeDiscoverApiRequest(selectLang, selectGenre)
                 } else {
                     //use search api endpoint
-                    makeSearchApiRequest(selectLang, selectGenre, searchQuery)
+                    makeSearchApiRequest(selectLang, selectGenre, selectTitle)
                 }
                 // Clear search parameters
                 var selectLang = ""
                 var selectGenre = ""
-                var searchQuery = ""
+                var selectTitle = ""
 
                 // populates the recyclerview (will need to fix this approach if possible)
                 val recycleAdapter = MovieAdapter(arrayOfMovies)
@@ -200,10 +134,6 @@ class MainActivity: AppCompatActivity(){
                 recyclerView.visibility = View.VISIBLE
             }
         }
-
-        // Create methods to grab movie data (TODO API/backend team)
-        /* CHANGE THE ARRAY arrayOfMovies TO FIT YOUR PARSED DATA*/
-
     }
     private fun getMovieGenres() {
         val client = AsyncHttpClient()
@@ -389,19 +319,11 @@ class MainActivity: AppCompatActivity(){
                 if (!responseBody.isNullOrBlank()) {
                     // Parse the JSON response
                     val movies = parseSearchMovies(JSONObject(responseBody), language, genre)
-//                    // Filter movies with matching genre (genre_ids) and language (original_language)
-//                    val filteredMovies = movies.filter { movie ->
-//                        val genreMatches = genre.isNullOrBlank() || movie["genre"]?.contains(genre) == true
-//                        val languageMatches = movie["original_language"] == language
-//                        genreMatches && languageMatches
-//                    }
 
                     // Update UI with filtered movies
                     updateUIWithMovies(movies)
                     Log.d("searchCriteria", "Queried data: $language, $genre")
                     Log.d("getMovieList", "Queried Movies: $movies")
-                    //filter movies with matching genre (genre_ids) and language (original_language)
-//                    updateUIWithMovies(movies)
                 }
             }
 
@@ -452,7 +374,6 @@ class MainActivity: AppCompatActivity(){
                 val movieObject = resultsArray.getJSONObject(i)
                 val genreList = movieObject.getJSONArray("genre_ids")
                 val genreArray = Array<String>(genreList.length()) { j->
-//                    genres[genreList[it]]
                     genres.entries.find { it.value == genreList[j] }!!.key
                 }
                 if (genre != "") {
@@ -493,17 +414,12 @@ class MainActivity: AppCompatActivity(){
     }
 
     private fun updateUIWithMovies(movies: Array<Map<String, String>>) {
-        // Assuming you have a RecyclerView with its adapter already set up
         val recyclerView: RecyclerView = findViewById(R.id.movieRecyclerView)
-
-        // Create an adapter with the list of movies
         val movieAdapter = MovieAdapter(movies)
-
 
         // Set the adapter to the RecyclerView
         recyclerView.adapter = movieAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.visibility = View.VISIBLE
     }
-
 }
