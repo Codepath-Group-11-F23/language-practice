@@ -2,7 +2,6 @@ package com.osu.cinespeak
 
 import android.content.Context
 import android.os.Bundle
-import android.util.ArrayMap
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -27,8 +26,6 @@ import org.json.JSONObject
 
 class MainActivity: AppCompatActivity(){
 
-    private val genreIdToNameMap = mutableMapOf<Int, String>()
-
     lateinit var genres: HashMap<String, Int>
     lateinit var languages: HashMap<String, String>
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +46,7 @@ class MainActivity: AppCompatActivity(){
 
         /* create mutable list of maps (key-value dictionary pairs) to grab appropriate fields for
         recyclerview adapter (PLACEHOLDER)*/
-        var arrayOfMovies: Array<Map<String, Any>> = emptyArray()
+        val arrayOfMovies: Array<Map<String, Any>> = emptyArray()
 
         // get search button
         val button: MaterialButton = findViewById(R.id.search_button)
@@ -112,7 +109,7 @@ class MainActivity: AppCompatActivity(){
         will need API team to hook up the keyword, language, genre query request*/
         button.setOnClickListener{
             if(selectLang == "") {
-                var toastText = "PLEASE CHOOSE A SPOKEN LANGUAGE"
+                val toastText = "PLEASE CHOOSE A SPOKEN LANGUAGE"
                 Toast.makeText(this, toastText, Toast.LENGTH_LONG).show()
             } else {
                 if(selectTitle == "") {
@@ -123,9 +120,9 @@ class MainActivity: AppCompatActivity(){
                     makeSearchApiRequest(selectLang, selectGenre, selectTitle)
                 }
                 // Clear search parameters
-                var selectLang = ""
-                var selectGenre = ""
-                var selectTitle = ""
+                selectLang = ""
+                selectGenre = ""
+                selectTitle = ""
 
                 // populates the recyclerview (will need to fix this approach if possible)
                 val recycleAdapter = MovieAdapter(arrayOfMovies)
@@ -349,8 +346,8 @@ class MainActivity: AppCompatActivity(){
 
                 val genreList = movieObject.getJSONArray("genre_ids")
 
-                for (i in 0 until genreList.length()) {
-                    val genreString = genres.entries.find { it.value == genreList[i] }!!.key
+                for (j in 0 until genreList.length()) {
+                    val genreString = genres.entries.find { it.value == genreList[j] }!!.key
                     genreStringList.add(genreString)
                 }
 
@@ -369,7 +366,7 @@ class MainActivity: AppCompatActivity(){
 
     private fun parseSearchMovies(response: JSONObject, language: String, genre: String?): Array<Map<String, Any>> {
         val moviesList = mutableListOf<Map<String, Any>>()
-        var genreStringList = mutableListOf<String>()
+        var genreStringList: MutableList<String>
         val genreId = genres[genre]
         val languageId = languages[language]
 
@@ -383,8 +380,8 @@ class MainActivity: AppCompatActivity(){
                 val movieObject = resultsArray.getJSONObject(i)
                 val genreList = movieObject.getJSONArray("genre_ids")
 
-                for (i in 0 until genreList.length()) {
-                    if (genre != "" && genreList[i] == genreId) {
+                for (j in 0 until genreList.length()) {
+                    if (genre != "" && genreList[j] == genreId) {
                         hasGenre = true
                     }
                     val genreString = genres.entries.find { it.value == genreList[i] }!!.key
