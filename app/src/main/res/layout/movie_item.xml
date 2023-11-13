@@ -64,7 +64,7 @@
         app:layout_constraintTop_toBottomOf="@+id/cardTitle" />
 
     <TextView
-        android:id="@+id/cardRuntime"
+        android:id="@+id/cardRating"
         style="@style/cardElements"
         android:layout_width="137dp"
         android:layout_height="22dp"
@@ -72,7 +72,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
         android:minHeight="48dp"
-        android:text="@string/runtime_placeholder"
+        android:text="@string/rating_placeholder"
         app:layout_constraintEnd_toEndOf="@+id/search_results"
         app:layout_constraintHorizontal_bias="0.02"
         app:layout_constraintStart_toEndOf="@+id/posterView"

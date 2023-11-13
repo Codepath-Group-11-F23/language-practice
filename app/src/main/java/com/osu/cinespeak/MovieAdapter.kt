@@ -15,14 +15,14 @@ class MovieAdapter(val movieCollection: Array<Map<String, String>>):
         val favImage: ImageView
         val movieTitle: TextView
         val movieGenre: TextView
-        val movieLength: TextView
+        val movieRating: TextView
 
         init {
             movieImage = view.findViewById(R.id.posterView)
             favImage = view.findViewById(R.id.favView)
             movieTitle = view.findViewById(R.id.cardTitle)
             movieGenre = view.findViewById(R.id.cardGenre)
-            movieLength = view.findViewById(R.id.cardRuntime)
+            movieRating = view.findViewById(R.id.cardRating)
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,7 +35,7 @@ class MovieAdapter(val movieCollection: Array<Map<String, String>>):
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.movieTitle.text = movieCollection[position]["title"]
-        holder.movieLength.text = movieCollection[position]["runtime"] + " minutes"
+        holder.movieRating.text = movieCollection[position]["rating"] + "/10"
         holder.movieGenre.text = movieCollection[position]["genre"]
 
         Glide.with(holder.itemView)

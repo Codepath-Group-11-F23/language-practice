@@ -314,11 +314,11 @@ class MainActivity: AppCompatActivity(){
             override fun onSuccess(statusCode: Int, headers: Headers?, responseBody: String?) {
                 // Handle the successful response here
                 if (!responseBody.isNullOrBlank()) {
-                    // Parse the JSON response
-                    val movies = parseMovies(JSONObject(responseBody))
+                     // Parse the JSON response
+                    val movies = parseDiscoverMovies(JSONObject(responseBody))
                     Log.d("searchCriteria", "Queried data: $language, $genre")
                     Log.d("getMovieList", "Queried Movies: $movies")
-//                    updateUIWithMovies(movies)
+                    updateUIWithMovies(movies)
                 }
             }
 
@@ -348,7 +348,16 @@ class MainActivity: AppCompatActivity(){
                 // Handle the successful response here
                 if (!responseBody.isNullOrBlank()) {
                     // Parse the JSON response
-                    val movies = parseMovies(JSONObject(responseBody))
+                    val movies = parseSearchMovies(JSONObject(responseBody), language, genre)
+//                    // Filter movies with matching genre (genre_ids) and language (original_language)
+//                    val filteredMovies = movies.filter { movie ->
+//                        val genreMatches = genre.isNullOrBlank() || movie["genre"]?.contains(genre) == true
+//                        val languageMatches = movie["original_language"] == language
+//                        genreMatches && languageMatches
+//                    }
+
+                    // Update UI with filtered movies
+                    updateUIWithMovies(movies)
                     Log.d("searchCriteria", "Queried data: $language, $genre")
                     Log.d("getMovieList", "Queried Movies: $movies")
                     //filter movies with matching genre (genre_ids) and language (original_language)
@@ -367,50 +376,95 @@ class MainActivity: AppCompatActivity(){
             }
         })
     }
-
-
-    private fun parseMovies(response: JSONObject): List<Map<String, String>> {
+    private fun parseDiscoverMovies(response: JSONObject): Array<Map<String, String>> {
         val moviesList = mutableListOf<Map<String, String>>()
+        if (response.has("results")) {
+            val resultsArray = response.getJSONArray("results")
+            var hasGenre = false
+            for (i in 0 until resultsArray.length()) {
+                hasGenre = false
+                val movieObject = resultsArray.getJSONObject(i)
 
-        // Check if the response contains the "results" array
-//        if (response.has("results")) {
-//            val resultsArray = response.getJSONArray("results")
-//            for (i in 0 until resultsArray.length()) {
-//                val movieObject = resultsArray.getJSONObject(i)
-//                val genresArray = movieObject.getJSONArray("genre_ids")
-//
-//                val genreList = mutableListOf<String>()
-//                for (j in 0 until genresArray.length()) {
-//                    val genreId = genresArray.getInt(j)
-//                    // Assuming you have a function to get the genre name based on genreId
-//                    val genreName = genreIdToNameMap[genreId] ?: ""
-//                    if (genreName.isNotEmpty()) {
-//                        genreList.add(genreName)
-//                    }
-//                }
-//                val movieMap = mapOf(
-//                    "poster_path" to movieObject.getString("poster_path"),
-//                    "title" to movieObject.getString("title"),
-//                    "genre" to genreList.joinToString(", "),
-//                    "runtime" to movieObject.getString("runtime")
-//                )
-//                moviesList.add(movieMap)
-//            }
-//        }
-
-        return moviesList
+                val movieMap = mapOf(
+                    "poster_path" to movieObject.getString("poster_path"),
+                    "title" to movieObject.getString("title"),
+                    "genre" to movieObject.getString("genre_ids"),
+                    "rating" to if (movieObject.has("vote_average")) movieObject.getString("vote_average") else "",
+                    "original_language" to movieObject.getString("original_language")
+                )
+                moviesList.add(movieMap)
+            }
+        }
+        return moviesList.toTypedArray()
     }
 
-    private fun updateUIWithMovies(movies: List<Map<String, String>>) {
+    private fun parseSearchMovies(response: JSONObject, language: String, genre: String?): Array<Map<String, String>> {
+        val moviesList = mutableListOf<Map<String, String>>()
+        val genreId = genres[genre]
+        val languageId = languages[language]
+
+        // Check if the response contains the "results" array
+        if (response.has("results")) {
+            val resultsArray = response.getJSONArray("results")
+            var hasGenre = false
+            for (i in 0 until resultsArray.length()) {
+                hasGenre = false
+                val movieObject = resultsArray.getJSONObject(i)
+                val genreList = movieObject.getJSONArray("genre_ids")
+                val genreArray = Array<String>(genreList.length()) { j->
+//                    genres[genreList[it]]
+                    genres.entries.find { it.value == genreList[j] }!!.key
+                }
+                if (genre != "") {
+
+                    for (i in 0 until genreList.length()) {
+                        if (genreList[i] == genreId) {
+                            hasGenre = true
+                        }
+                    }
+                }
+
+                if (movieObject.getString("original_language") == languageId) {
+                    if (genre == "") {
+                        val movieMap = mapOf(
+                            "poster_path" to movieObject.getString("poster_path"),
+                            "title" to movieObject.getString("title"),
+                            "genre" to genreArray,
+                            "rating" to if (movieObject.has("vote_average")) movieObject.getString("vote_average") else "",
+                            "original_language" to movieObject.getString("original_language")
+                        )
+//                        TODO(Make movieMap type match the movie collection in MovieAdapter.kt)
+                        moviesList.add(movieMap)
+                    } else if (hasGenre) {
+                        val movieMap = mapOf(
+                            "poster_path" to movieObject.getString("poster_path"),
+                            "title" to movieObject.getString("title"),
+                            "genre" to genreArray,
+                            "rating" to if (movieObject.has("vote_average")) movieObject.getString("vote_average") else "",
+                            "original_language" to movieObject.getString("original_language")
+                        )
+                        moviesList.add(movieMap)
+                    }
+
+                }
+            }
+        }
+
+        return moviesList.toTypedArray()
+    }
+
+    private fun updateUIWithMovies(movies: Array<Map<String, String>>) {
         // Assuming you have a RecyclerView with its adapter already set up
         val recyclerView: RecyclerView = findViewById(R.id.movieRecyclerView)
 
         // Create an adapter with the list of movies
-        val movieAdapter = MovieAdapter(movies.toTypedArray())
+        val movieAdapter = MovieAdapter(movies)
 
 
         // Set the adapter to the RecyclerView
         recyclerView.adapter = movieAdapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.visibility = View.VISIBLE
     }
 
     // set adapters for spinners
