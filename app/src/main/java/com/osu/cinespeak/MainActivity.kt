@@ -390,7 +390,7 @@ class MainActivity: AppCompatActivity(){
                 val movieObject = resultsArray.getJSONObject(i)
 
                 val movieMap = mapOf(
-                    "poster_path" to movieObject.getString("poster_path"),
+                    "poster_path" to "https://image.tmdb.org/t/p/original" + movieObject.getString("poster_path"),
                     "title" to movieObject.getString("title"),
                     "genre" to movieObject.getString("genre_ids"),
                     "rating" to if (movieObject.has("vote_average")) movieObject.getString("vote_average") else "",
@@ -431,17 +431,16 @@ class MainActivity: AppCompatActivity(){
                 if (movieObject.getString("original_language") == languageId) {
                     if (genre == "") {
                         val movieMap = mapOf(
-                            "poster_path" to movieObject.getString("poster_path"),
+                            "poster_path" to "https://image.tmdb.org/t/p/original" + movieObject.getString( "poster_path"),
                             "title" to movieObject.getString("title"),
                             "genre" to genreArray,
                             "rating" to if (movieObject.has("vote_average")) movieObject.getString("vote_average") else "",
                             "original_language" to movieObject.getString("original_language")
                         )
-//                        TODO(Make movieMap type match the movie collection in MovieAdapter.kt)
                         moviesList.add(movieMap as Map<String, String>)
                     } else if (hasGenre) {
                         val movieMap = mapOf(
-                            "poster_path" to movieObject.getString("poster_path"),
+                            "poster_path" to "https://image.tmdb.org/t/p/original" + movieObject.getString("poster_path"),
                             "title" to movieObject.getString("title"),
                             "genre" to genreArray,
                             "rating" to if (movieObject.has("vote_average")) movieObject.getString("vote_average") else "",
