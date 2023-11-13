@@ -11,7 +11,7 @@
     <string name="movie_image_desc">Placeholder image for movie posters</string>
     <string name="movie_title_placeholder">Title Placeholder</string>
     <string name="genre_placeholder">Genre(s) Placeholder</string>
-    <string name="runtime_placeholder">Time Pending</string>
+    <string name="rating_placeholder">Rating</string>
     <string name="movie_summary_placeholder">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent varius efficitur nisi non
         mattis. Vestibulum faucibus dui ut porttitor suscipit. Praesent ornare sapien nisl, a
