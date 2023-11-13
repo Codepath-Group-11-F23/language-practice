@@ -2,6 +2,7 @@ package com.osu.cinespeak
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -27,6 +28,7 @@ import okhttp3.Headers
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.Serializable
 
 
 class MainActivity: AppCompatActivity(){
@@ -155,10 +157,11 @@ class MainActivity: AppCompatActivity(){
                     //use search api endpoint
                     makeSearchApiRequest(selectLang, selectGenre, selectTitle)
                 }
-                // Clear search parameters
-                selectLang = ""
-                selectGenre = ""
-                selectTitle = ""
+
+                // hides the keyboard when the search button is clicked
+                val inputMethodManager =
+                    getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(searchBar.windowToken, 0)
 
                 // populates the recyclerview (will need to fix this approach if possible)
                 val searchResultsImageView: ShapeableImageView = findViewById(R.id.search_results)
@@ -400,6 +403,7 @@ class MainActivity: AppCompatActivity(){
                     "poster_path" to "https://image.tmdb.org/t/p/original" + movieObject.getString("poster_path"),
                     "title" to movieObject.getString("title"),
                     "genre" to genreStringList,
+                    "overview" to movieObject.getString("overview"),
                     "rating" to if (movieObject.has("vote_average")) movieObject.getString("vote_average") else "",
                     "original_language" to movieObject.getString("original_language")
                 )
@@ -429,7 +433,7 @@ class MainActivity: AppCompatActivity(){
                     if (genre != "" && genreList[j] == genreId) {
                         hasGenre = true
                     }
-                    val genreString = genres.entries.find { it.value == genreList[i] }!!.key
+                    val genreString = genres.entries.find { it.value == genreList[j] }!!.key
                     genreStringList.add(genreString)
                 }
 
@@ -439,6 +443,7 @@ class MainActivity: AppCompatActivity(){
                             "poster_path" to "https://image.tmdb.org/t/p/original" + movieObject.getString( "poster_path"),
                             "title" to movieObject.getString("title"),
                             "genre" to genreStringList,
+                            "overview" to movieObject.getString("overview"),
                             "rating" to if (movieObject.has("vote_average")) movieObject.getString("vote_average") else "",
                             "original_language" to movieObject.getString("original_language")
                         )
@@ -448,6 +453,7 @@ class MainActivity: AppCompatActivity(){
                             "poster_path" to "https://image.tmdb.org/t/p/original" + movieObject.getString("poster_path"),
                             "title" to movieObject.getString("title"),
                             "genre" to genreStringList,
+                            "overview" to movieObject.getString("overview"),
                             "rating" to if (movieObject.has("vote_average")) movieObject.getString("vote_average") else "",
                             "original_language" to movieObject.getString("original_language")
                         )
@@ -469,5 +475,19 @@ class MainActivity: AppCompatActivity(){
         recyclerView.adapter = movieAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.visibility = View.VISIBLE
+
+        movieAdapter.setOnClickListener(object:
+            MovieAdapter.OnClickListener {
+                override fun onClick(position: Int, movie: Map<String, Any>) {
+                    val intent = Intent(this@MainActivity, MovieDetailActivity::class.java)
+                    intent.putExtra(DETAIL_SCREEN, movie as Serializable)
+                    startActivity(intent)
+                }
+            }
+        )
+    }
+
+    companion object {
+        val DETAIL_SCREEN="movie_details_screen"
     }
 }
