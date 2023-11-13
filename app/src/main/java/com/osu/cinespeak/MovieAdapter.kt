@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class MovieAdapter(val movieCollection: Array<Map<String, String>>):
+class MovieAdapter(val movieCollection: Array<Map<String, Any>>):
     RecyclerView.Adapter<MovieAdapter.ViewHolder>()  {
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val movieImage: ImageView
@@ -34,15 +34,21 @@ class MovieAdapter(val movieCollection: Array<Map<String, String>>):
     override fun getItemCount(): Int = movieCollection.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.movieTitle.text = movieCollection[position]["title"]
-        holder.movieRating.text = movieCollection[position]["rating"] + "/10"
-        holder.movieGenre.text = movieCollection[position]["genre"]
+        val genreStringList = movieCollection[position]["genre"] as List<String>
+        var genreText = ""
+        holder.movieTitle.text = movieCollection[position]["title"].toString()
+        holder.movieRating.text = movieCollection[position]["rating"].toString() + "/10"
+
+        for(i in 0..<genreStringList.size) {
+            genreText += genreStringList[i] + " "
+        }
+        holder.movieGenre.text = genreText
 
         Glide.with(holder.itemView)
-            .load(movieCollection[position]["poster_path"])
-            .placeholder(R.drawable.ic_launcher_foreground)
-            .centerCrop()
-            .into(holder.movieImage)
+        .load(movieCollection[position]["poster_path"].toString())
+        .placeholder(R.drawable.ic_launcher_foreground)
+        .centerCrop()
+        .into(holder.movieImage)
 
     }
 }
