@@ -24,7 +24,7 @@ class MovieDetailActivity : AppCompatActivity() {
 
         val backArrow = findViewById<ImageView>(R.id.back)
         backArrow.setOnClickListener {
-            // remove this activity to reveal MainActviity again
+            this.finish()
         }
 
         if(intent.hasExtra(MainActivity.DETAIL_SCREEN)) {
