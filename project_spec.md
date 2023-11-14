@@ -175,7 +175,7 @@ Process Demo #2: recorded with ScreenToGif
 
 Process Demo #3: recorded with ScreenToGif
 
-<img src="https://i.imgur.com/zYioHSH.gif](https://github.com/Codepath-Group-11-F23/language-practice/blob/master/UC%233_Demo.gif" width=600>
+<img src="https://github.com/Codepath-Group-11-F23/language-practice/blob/master/UC%233_Demo.gif" width=600>
 
 
 ## License
