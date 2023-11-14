@@ -385,11 +385,12 @@ class MainActivity: AppCompatActivity(){
     }
     private fun parseDiscoverMovies(response: JSONObject): Array<Map<String, Any>> {
         val moviesList = mutableListOf<Map<String, Any>>()
-        val genreStringList = mutableListOf<String>()
+        var genreStringList = mutableListOf<String>()
 
         if (response.has("results")) {
             val resultsArray = response.getJSONArray("results")
             for (i in 0 until resultsArray.length()) {
+                genreStringList = mutableListOf<String>()
                 val movieObject = resultsArray.getJSONObject(i)
 
                 val genreList = movieObject.getJSONArray("genre_ids")
