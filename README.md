@@ -45,8 +45,7 @@ Here's a video that demos all of the app's implemented features:
 
 <img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Demo' width='' alt='Video Demo' />
 
-[![Now in Android: 55](https://i.ytimg.com/vi/SdfBS3T1U7M/maxresdefault.jpg)](https://www.youtube.com/watch?v=SdfBS3T1U7M&ab_channel=MichelleMann "Now in Android: 55")
-
+[Click here for full video!](https://www.youtube.com/watch?v=SdfBS3T1U7M&ab_channel=MichelleMann)
 
 VIDEO created with **Adobe Premiere**
 
