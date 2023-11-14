@@ -46,7 +46,7 @@ Here's a video that demos all of the app's implemented features:
 <img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Demo' width='' alt='Video Demo' />
 
 
-![YouTube Video]([https://youtubify.iframe.ly/embed/SdfBS3T1U7M](https://youtu.be/SdfBS3T1U7M))
+<iframe width="560" height="315" src="https://www.youtube.com/embed/SdfBS3T1U7M?si=BiBJ6pb8NVrKrpnt" title="YouTube video player"></iframe>
 
 VIDEO created with **Adobe Premiere**
 
