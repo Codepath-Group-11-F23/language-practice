@@ -45,6 +45,8 @@ Here's a video that demos all of the app's implemented features:
 
 <img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Demo' width='' alt='Video Demo' />
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/SdfBS3T1U7M?si=JXlEaWViKSFBpIPN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 VIDEO created with **Adobe Premiere**
 
 ## Notes
