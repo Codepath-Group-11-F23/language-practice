@@ -26,7 +26,7 @@ The following REQUIRED features are completed:
 
 The following REQUIRED files are included:
 
-- [ ] Updated 📄 `project_spec.md`, which contains:
+- [X] Updated 📄 `project_spec.md`, which contains:
   - [X] App Overview (Milestone 1)
   - [X] App Spec (Milestone 1)
   - [X] Checked off 2+ completed features
@@ -49,9 +49,7 @@ VIDEO created with **Adobe Premiere**
 
 ## Notes
 
-Here's a place for any other notes on this milestone!
-
-<!-- (This is a comment) INSTRUCTIONS: Go through this page and fill out any **bolded** entries with their correct values.-->
+Collaborated between 5 teammates to retrieve movie data from TMDB to populate dropdown menus and used the user input settings to get movie results listing the poster image, name, genre(s), and ratings. Additional functionality to click on movie results to see the details of the each movie (includes the synopsis/summary).
 
 # AND101 Milestone 1 - **Pod 11/Language Practice**
 
