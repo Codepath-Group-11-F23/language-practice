@@ -70,6 +70,7 @@ class MainActivity: AppCompatActivity(){
                 val itemSelect = spokeSpin.getItemAtPosition(p2) as String
                 // CHANGE THIS TO DEFAULT OPTION
                 if (itemSelect == "No Language"){
+                    selectLang = ""
                     button.visibility = View.GONE
                 } else {
                     selectLang = itemSelect
@@ -90,6 +91,8 @@ class MainActivity: AppCompatActivity(){
                 // CHANGE THIS TO DEFAULT OPTION
                 if (itemSelect != "None"){
                     selectGenre = itemSelect
+                } else {
+                    selectGenre = ""
                 }
                 button.visibility = View.VISIBLE
             }
