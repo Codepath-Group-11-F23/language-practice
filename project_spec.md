@@ -179,7 +179,7 @@ Process Demo #3: recorded with ScreenToGif
 
 ## License
 
-Copyright **2023**, **Noah Dean, Lawrence Kwok, Michelle Mann, Monica Marek, Ryan Speese**
+Copyright **2023**, **Noah Dean, Lawrence Kwok, Michelle Mann, Monika Marek, Ryan Speese**
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
