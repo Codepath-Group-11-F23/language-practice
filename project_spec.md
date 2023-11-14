@@ -1,4 +1,4 @@
-# **TalkFlix!**
+# **CineSpeak!**
 
 ## Table of Contents
 
