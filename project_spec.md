@@ -165,6 +165,15 @@ process, or what you learned this unit!
 
 For Milestone 2, include **2+ Videos/GIFs** of the build process here!
 
+Process Demo #1: recorded with ScreenToGif
+<img src="https://i.imgur.com/pY1TzaW.gif" width=600>
+
+Process Demo #2: recorded with ScreenToGif
+<img src="https://i.imgur.com/zYioHSH.gif" width=600>
+
+Process Demo #3: recorded with ScreenToGif
+
+
 ## License
 
 Copyright **2023**, **Noah Dean, Lawrence Kwok, Michelle Mann, Monica Marek, Ryan Speese**
